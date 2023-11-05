@@ -1,10 +1,14 @@
 import { FcGoogle } from "react-icons/fc";
+import { NavLink } from "react-router-dom";
 
 const Login = () => {
   return (
     <div className="min-h-screen bg-base-200 flex justify-center items-center">
       <div className="card flex-shrink-0 w-full max-w-md shadow-2xl bg-base-100">
-        <form className="card-body" onSubmit={handleSubmit}>
+        <form
+          className="card-body"
+          // onSubmit={handleSubmit}
+        >
           <div className="form-control">
             <label className="label">
               <span className="label-text">Email</span>
@@ -46,7 +50,7 @@ const Login = () => {
           <div className="divider ">Or, Continue With</div>
           <button
             type="button"
-            onClick={handleGoogleLogin}
+            // onClick={handleGoogleLogin}
             className="btn btn-outline btn-primary  w-full flex justify-between items-center cursor-pointer "
           >
             Google
@@ -56,10 +60,6 @@ const Login = () => {
       </div>
     </div>
   );
-};
-
-export default Login;
-
 };
 
 export default Login;

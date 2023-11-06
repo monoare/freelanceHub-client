@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
@@ -29,3 +30,7 @@ const MainLayout = ({ children }) => {
 };
 
 export default MainLayout;
+
+MainLayout.propTypes = {
+  children: PropTypes.node,
+};

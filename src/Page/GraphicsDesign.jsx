@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxios from "../Hooks/useAxios";
 import { Link } from "react-router-dom";
 
-const WebDevelopment = () => {
+const GraphicsDesign = () => {
   const axios = useAxios();
   const { data: job } = useQuery({
     queryKey: ["jobs"],
@@ -12,29 +12,25 @@ const WebDevelopment = () => {
     },
   });
 
-  const webDevelopmentJobs = job?.data.filter(
-    (item) => item.category === "Web Development"
+  const graphicsDesignJobs = job?.data.filter(
+    (item) => item.category === "Graphics Design"
   );
 
   return (
     <div className="my-10">
-      <h1 className="text-3xl text-center font-semibold text-[#51A4FB]">
-        Web Development
-      </h1>
-      <p className="py-5 text-justify">
-        {" "}
-        Discover our exciting web development job opportunities by exploring our
-        listings in the &quot;Web Development&quot; category. Whether
-        you&apos;re a talented developer seeking your next challenge or a
-        business looking to hire top web development talent, our platform is the
-        perfect place to find and post web development jobs. Browse through a
-        wide range of positions in web development, including full-stack
-        developers, front-end developers, back-end developers, UI/UX designers,
-        mobile app developers, and more. Join our community and unlock a world
-        of web development possibilities today.
+      <h1 className="text-3xl">Graphics Design</h1>
+      <p>
+        Discover a wealth of dynamic digital marketing job listings right here.
+        Whether you&apos;re an experienced digital marketing pro seeking your
+        next challenge or a business looking to tap into marketing expertise,
+        you&apos;ll find a plethora of roles waiting for you. From digital
+        marketing managers to SEO experts, explore a diverse range of positions
+        in the digital marketing realm. Dive into our vibrant digital marketing
+        community to unlock limitless opportunities for online marketing
+        success. Don&apos;t wait; begin your digital marketing journey today!
       </p>
       <div className="grid grid-1 lg:grid-cols-4 gap-6">
-        {webDevelopmentJobs?.map((item, indx) => (
+        {graphicsDesignJobs?.map((item, indx) => (
           <div className="card bg-[#51A4FB] text-primary-content" key={indx}>
             <div className="card-body">
               <h2 className="text-black font-semibold text-xl">
@@ -54,7 +50,7 @@ const WebDevelopment = () => {
                 <span className="font-medium">{item.deadline}</span>
               </p>
               <div className="w-full">
-                <Link to={`/jobDetails/${item._id}`}>
+                <Link to="/jobDetails">
                   <button className="btn w-full capitalize">Bid Now</button>
                 </Link>
               </div>
@@ -66,4 +62,4 @@ const WebDevelopment = () => {
   );
 };
 
-export default WebDevelopment;
+export default GraphicsDesign;

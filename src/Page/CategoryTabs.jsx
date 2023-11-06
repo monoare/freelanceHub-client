@@ -5,6 +5,8 @@ import { FaComputer } from "react-icons/fa6";
 import { SiMarketo } from "react-icons/si";
 import { MdDesignServices } from "react-icons/md";
 import WebDevelopment from "./WebDevelopment";
+import DigitalMarketing from "./DigitalMarketing";
+import GraphicsDesign from "./GraphicsDesign";
 
 const CategoryTabs = () => {
   return (
@@ -37,10 +39,10 @@ const CategoryTabs = () => {
           </div>
         </TabPanel>
         <TabPanel>
-          <h2>Any content 2</h2>
+          <DigitalMarketing></DigitalMarketing>
         </TabPanel>
         <TabPanel>
-          <h2>Any content 3</h2>
+          <GraphicsDesign></GraphicsDesign>
         </TabPanel>
       </Tabs>
     </Container>

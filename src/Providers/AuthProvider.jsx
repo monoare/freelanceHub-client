@@ -7,7 +7,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
 } from "firebase/auth";
 import { auth } from "../Config/Firebase.config";
 
@@ -33,30 +32,23 @@ const AuthProvider = ({ children }) => {
     setIsLoading(true);
     return signInWithPopup(auth, provider);
   };
+  // logout user
+  const logout = () => {
+    setIsLoading(true);
+    return signOut(auth);
+  };
 
   //   get the current user
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        console.log("Current user:", currentUser);
-        setIsLoading(false);
-      }
+      setUser(currentUser);
+      console.log("Current user:", currentUser);
+      setIsLoading(false);
     });
     return () => {
       return unsubscribe();
     };
   }, []);
-
-  //   Update profile
-  const updateInfo = () => {
-    updateProfile(auth.currentUser, { displayName, photoURL });
-  };
-
-  // logout user
-  const logout = () => {
-    return signOut(auth);
-  };
 
   const authInfo = { user, isLoading, signUp, login, logout, googleLogin };
 

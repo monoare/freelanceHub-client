@@ -4,6 +4,7 @@ import Container from "../Components/UI/Container";
 import { FaComputer } from "react-icons/fa6";
 import { SiMarketo } from "react-icons/si";
 import { MdDesignServices } from "react-icons/md";
+import WebDevelopment from "./WebDevelopment";
 
 const CategoryTabs = () => {
   return (
@@ -31,7 +32,9 @@ const CategoryTabs = () => {
         </TabList>
 
         <TabPanel>
-          <h2>Any content 1</h2>
+          <div>
+            <WebDevelopment></WebDevelopment>
+          </div>
         </TabPanel>
         <TabPanel>
           <h2>Any content 2</h2>

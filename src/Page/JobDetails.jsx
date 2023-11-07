@@ -22,9 +22,9 @@ const JobDetails = () => {
   });
 
   const { mutate } = useMutation({
-    mutationKey: ["createBid"],
-    mutationFn: (biddingData) => {
-      return axios.post("/user/create-bid", biddingData);
+    mutationKey: ["booking"],
+    mutationFn: (bookingData) => {
+      return axios.post("/user/create-booking", bookingData);
     },
   });
 

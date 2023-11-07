@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import useAuth from "../Hooks/useAuth";
-import doodle from "../assets/image/5146938.jpg";
+import updateDoodle from "../assets/image/update.jpg";
 import useAxios from "../Hooks/useAxios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
-const AddJob = () => {
+const UpdateJob = () => {
   const [jobTitle, setJobTitle] = useState("");
   const [deadline, setDeadline] = useState("");
   const [description, setDescription] = useState("");
@@ -13,36 +14,73 @@ const AddJob = () => {
   const [priceRange, setPriceRange] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const { id } = useParams(); // Destructure the id from useParams
+  console.log(id);
 
   const axios = useAxios();
   const { user } = useAuth();
 
-  const { mutate, isSuccess } = useMutation({
-    mutationKey: ["addJobs"],
-    mutationFn: (jobData) => {
-      return axios.post("/jobs", jobData);
+  //   Get the jobs from DB
+  const { data: job, isLoading } = useQuery({
+    queryKey: ["jobs"],
+    queryFn: async () => {
+      const res = await axios.get("/jobs");
+      return res.data;
     },
   });
 
+  const jobId = id;
+  const filterJob = job ? job.find((item) => item._id === jobId) : null;
+  console.log(filterJob);
+
+  //   Update the job to DB
+  const { mutate, isSuccess } = useMutation({
+    mutationKey: ["updateJob"],
+    mutationFn: (updateJob) => {
+      return axios.patch("/user/jobs", updateJob);
+    },
+  });
+
+  // Extract numeric values when "job" data is available
   useEffect(() => {
-    if (minPrice && maxPrice) {
-      const rang = `${minPrice} - ${maxPrice}`;
-      setPriceRange(rang);
+    if (filterJob && filterJob.priceRange) {
+      const [min, max] = filterJob.priceRange.split(" - ");
+      setMinPrice(min);
+      setMaxPrice(max);
+      console.log(min, max);
     }
-  }, [minPrice, maxPrice]);
+  }, [filterJob]);
+
+  // Set default values for price inputs
+  useEffect(() => {
+    if (filterJob && filterJob.priceRange) {
+      setPriceRange(filterJob.priceRange);
+    }
+  }, [filterJob]);
+
+  console.log("price", minPrice, maxPrice);
 
   if (isSuccess) {
     console.log("job added");
     toast.success("Data added successfully");
   }
 
+  // Function to convert the date to the required format
+  // Format the date to "yyyy-MM-dd" format
+  const formatToYYYYMMDD = (dateString) => {
+    const date = new Date(dateString);
+    if (isNaN(date)) {
+      return ""; // Return an empty string for an invalid date
+    }
+    const formattedDate = date.toISOString().split("T")[0];
+    return formattedDate;
+  };
   // Add one day to the current date
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const tomorrowFormatted = tomorrow.toISOString().split("T")[0];
 
-  console.log(jobTitle, deadline, description, category, priceRange);
   return (
     <div>
       <div className="grid max-w-screen-xl grid-cols-1 gap-8 px-8 py-16 mx-auto rounded-lg md:grid-cols-2 md:px-12 lg:px-16 xl:px-32">
@@ -50,14 +88,15 @@ const AddJob = () => {
         <div className="flex flex-col justify-center items-center lg:justify-between">
           <div className="space-y-2 text-left">
             <h2 className="text-4xl font-bold lg:text-5xl text-center lg:text-left">
-              Post Your <br />{" "}
-              <span className="text-[#51A4FB]">Job Opportunity</span>
+              Update Your
+              <br /> <span className="text-[#51A4FB]">Posted Job</span>
             </h2>
             <p className="text-xl text-center lg:text-left pt-5 lg:pt-10">
-              Unlock the Potential of Your Projects with Top Talent
+              Refine and Optimize Your Existing Job Listing for Better
+              Opportunities and Results.
             </p>
           </div>
-          <img src={doodle} alt="" className="w-96 lg:w-full" />
+          <img src={updateDoodle} alt="" className="w-96 lg:w-full" />
         </div>
 
         {/* Column-2 */}
@@ -72,7 +111,7 @@ const AddJob = () => {
             <input
               type="email"
               placeholder="Email"
-              defaultValue={user?.email}
+              defaultValue={filterJob?.email}
               className="input input-bordered"
               readOnly
             />
@@ -88,6 +127,7 @@ const AddJob = () => {
             <input
               type="text"
               name="jobTitle"
+              defaultValue={filterJob?.jobTitle}
               placeholder="Enter your job title"
               className="input input-bordered"
               required
@@ -107,8 +147,8 @@ const AddJob = () => {
               required
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="" className="pb-2" disabled>
-                Choose one
+              <option className="pb-2" disabled selected>
+                Your category: {filterJob?.category}
               </option>
               <option value="Web Development">Web Development</option>
               <option value="Digital Marketing">Digital Marketing</option>
@@ -126,6 +166,7 @@ const AddJob = () => {
             <input
               type="date"
               name="deadline"
+              defaultValue={formatToYYYYMMDD(filterJob?.deadline)}
               min={tomorrowFormatted}
               placeholder="Enter your job title"
               className="input input-bordered"
@@ -144,6 +185,7 @@ const AddJob = () => {
             <textarea
               className="textarea textarea-bordered textarea-lg w-full"
               placeholder="Description"
+              defaultValue={filterJob?.description}
               required
               onBlur={(e) => setDescription(e.target.value)}
             ></textarea>
@@ -153,7 +195,7 @@ const AddJob = () => {
           <div className="form-control">
             <label className="label">
               <span className="label-text font-medium text-[#51A4FB]">
-                Price Range
+                Price Range: ${minPrice} to ${maxPrice}
               </span>
             </label>
             <div className="flex gap-2">
@@ -161,6 +203,7 @@ const AddJob = () => {
                 type="number"
                 name="minPrice"
                 placeholder="$ Minimum price"
+                defaultValue={minPrice}
                 min={1}
                 className="input input-bordered text-sm w-1/2"
                 required
@@ -170,6 +213,7 @@ const AddJob = () => {
                 type="number"
                 name="maxPrice"
                 placeholder="$ Maximum price"
+                defaultValue={maxPrice}
                 min={Number(minPrice) + 1}
                 className="input input-bordered text-sm w-1/2"
                 required
@@ -191,7 +235,7 @@ const AddJob = () => {
             }}
             className="btn btn-primary w-full p-3 bg-[#51A4FB] text-sm font-bold tracking-normal uppercase rounded text-gray-900"
           >
-            Add You Job
+            Add Your Job
           </button>
         </form>
       </div>
@@ -199,4 +243,4 @@ const AddJob = () => {
   );
 };
 
-export default AddJob;
+export default UpdateJob;

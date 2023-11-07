@@ -51,7 +51,7 @@ const Navbar = () => {
               Home
             </NavLink>
             <NavLink
-              to="/addJob"
+              to="/user/addJob"
               className={({ isActive }) =>
                 isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
               }
@@ -59,7 +59,7 @@ const Navbar = () => {
               Add Job
             </NavLink>
             <NavLink
-              to="/myPostedJobs"
+              to="/user/myPostedJobs"
               className={({ isActive }) =>
                 isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
               }
@@ -67,7 +67,7 @@ const Navbar = () => {
               My Posted Jobs
             </NavLink>
             <NavLink
-              to="/myBids"
+              to="/user/myBids"
               className={({ isActive }) =>
                 isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
               }
@@ -75,7 +75,7 @@ const Navbar = () => {
               My Bids
             </NavLink>
             <NavLink
-              to="/bidRequests"
+              to="/user/bidRequests"
               className={({ isActive }) =>
                 isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
               }

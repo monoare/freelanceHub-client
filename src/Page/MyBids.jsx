@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Container from "../Components/UI/Container";
 import useAuth from "../Hooks/useAuth";
 import useAxios from "../Hooks/useAxios";
@@ -6,6 +6,7 @@ import useAxios from "../Hooks/useAxios";
 const MyBids = () => {
   const { user } = useAuth();
   const axios = useAxios();
+  const queryClient = useQueryClient();
   const { data: AppliedJobs } = useQuery({
     queryKey: ["appliedJobs"],
     queryFn: async () => {
@@ -16,15 +17,15 @@ const MyBids = () => {
 
   const { mutate } = useMutation({
     mutationKey: ["JobStatus"],
-    mutationFn: async (JobStatus, id) => {
-      const res = await axios.patch(`user/update-booking/${id}`, JobStatus);
-      console.log("clicked");
+    mutationFn: async (data) => {
+      const { id, status } = data; // Extract id and status from the data object
+      const res = await axios.patch(`user/update-booking/${id}`, { status });
       return res;
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["appliedJobs"]);
+    },
   });
-
-  console.log(user?.email);
-  console.log(AppliedJobs);
 
   return (
     <Container>
@@ -61,9 +62,11 @@ const MyBids = () => {
                           onClick={() => {
                             mutate({
                               status: "canceled",
+                              id: item._id,
                             });
                           }}
                           className="btn btn-warning btn-sm"
+                          disabled={item.status === "in progress"}
                         >
                           Reject
                         </button>
@@ -73,24 +76,43 @@ const MyBids = () => {
                           onClick={() => {
                             mutate({
                               status: "is in progress",
+                              id: item._id,
                             });
                           }}
                           className="btn btn-primary btn-sm"
+                          disabled={item.status === "in progress"}
                         >
                           Accept
                         </button>
                       </td>
                       <td>
-                        <button
-                          onClick={() => {
-                            mutate({
-                              status: "completed",
-                            });
-                          }}
-                          className="btn btn-secondary btn-sm"
-                        >
-                          Complete
-                        </button>
+                        {item?.status === "is in progress" ? (
+                          <button
+                            onClick={() => {
+                              mutate({
+                                status: "completed",
+                                id: item._id,
+                              });
+                            }}
+                            className="btn btn-secondary btn-sm"
+                            disabled={false}
+                          >
+                            Complete
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              mutate({
+                                status: "completed",
+                                id: item._id,
+                              });
+                            }}
+                            className="btn btn-secondary btn-sm"
+                            disabled={true}
+                          >
+                            Complete
+                          </button>
+                        )}
                       </td>
                     </>
                   )}

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import useAxios from "../Hooks/useAxios";
 import useAuth from "../Hooks/useAuth";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const JobDetails = () => {
   const [price, setPrice] = useState("");
@@ -21,13 +22,6 @@ const JobDetails = () => {
     },
   });
 
-  const { mutate } = useMutation({
-    mutationKey: ["booking"],
-    mutationFn: (bookingData) => {
-      return axios.post("/user/create-booking", bookingData);
-    },
-  });
-
   // Function to convert the date to the required format
   // Format the date to "yyyy-MM-dd" format
   const formatToYYYYMMDD = (dateString) => {
@@ -38,6 +32,11 @@ const JobDetails = () => {
     const formattedDate = date.toISOString().split("T")[0];
     return formattedDate;
   };
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const tomorrowFormatted = tomorrow.toISOString().split("T")[0];
 
   // Function to extract numeric values from the "priceRange" string
   const extractNumericValues = (priceRange) => {
@@ -55,10 +54,24 @@ const JobDetails = () => {
 
   // Set default values for price inputs
   useEffect(() => {
-    setPrice(jobs?.data?.priceRange || "");
+    setPrice(maxPrice || "");
+  }, [maxPrice]);
+
+  // Set default values for price inputs
+  useEffect(() => {
+    setDeadline(jobs?.data?.deadline || "");
   }, [jobs]);
 
-  console.log(minPrice, maxPrice);
+  const { mutate } = useMutation({
+    mutationKey: ["booking"],
+    mutationFn: (bookingData) => {
+      return axios.post("/user/create-booking", bookingData);
+    },
+    onMutate: () => {
+      toast.success("Successfully applied the job.");
+    },
+  });
+  console.log("deadline", formatToYYYYMMDD(jobs?.data?.deadline), price);
 
   console.log(jobs?.data);
   return (
@@ -66,9 +79,15 @@ const JobDetails = () => {
       <h1 className="text-5xl font-bold bg-base-200 text-center text-[#51A4FB] pt-10">
         Job Details
       </h1>
-      <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content ml-10 flex-col lg:flex-row-reverse">
-          <div className="text-center lg:text-left">
+      <div className="bg-base-200">
+        <p className="w-96 font-medium text-center py-5 bg-base-200 mx-auto">
+          Discover Job Details and Place Bids on FreelanceHub - Your Gateway to
+          Exciting Opportunities.
+        </p>
+      </div>
+      <div className="min-h-screen bg-base-200 flex justify-center px-40 pb-20">
+        <div className="flex flex-col items-center lg:flex-row-reverse gap-20">
+          <div className="text-center flex-[2] lg:text-left">
             <h1 className="text-3xl font-bold">
               Job Title: {jobs?.data?.jobTitle}
             </h1>
@@ -76,20 +95,20 @@ const JobDetails = () => {
               Description: {jobs?.data?.description}
             </p>
             <p className="py-6 text-xl font-medium">
-              Price: ${jobs?.data?.priceRange}
+              Price range: ${jobs?.data?.priceRange}
             </p>
             <p className="py-6 text-xl font-medium">
               Deadline:{" "}
               <span className="text-red-600">{jobs?.data?.deadline}</span>
             </p>
           </div>
-          <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <div className="card flex-[2]  md:w-[700px] shadow-2xl bg-base-100">
             <form className="card-body">
               {/* ------------Price---------- */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">
-                    Price range: ${minPrice} to {maxPrice}
+                    Price range: ${minPrice} to ${maxPrice}
                   </span>
                 </label>
                 <input
@@ -113,12 +132,9 @@ const JobDetails = () => {
                   type="date"
                   placeholder="Deadline"
                   className="input input-bordered"
-                  defaultValue={
-                    jobs?.data?.deadline
-                      ? formatToYYYYMMDD(jobs?.data?.deadline)
-                      : ""
-                  }
+                  defaultValue={formatToYYYYMMDD(jobs?.data?.deadline)}
                   onBlur={(e) => setDeadline(e.target.value)}
+                  min={tomorrowFormatted}
                   max={formatToYYYYMMDD(jobs?.data?.deadline)}
                   required
                 />
@@ -133,7 +149,7 @@ const JobDetails = () => {
                   placeholder="User Email"
                   defaultValue={user?.email}
                   className="input input-bordered"
-                  disabled
+                  readOnly
                 />
               </div>
               <div className="form-control">
@@ -142,6 +158,7 @@ const JobDetails = () => {
                 </label>
                 <input
                   type="email"
+                  defaultValue={jobs?.data?.email}
                   placeholder="Buyer Email"
                   className="input input-bordered"
                   disabled
@@ -149,19 +166,26 @@ const JobDetails = () => {
               </div>
 
               <div className="form-control mt-6">
-                <button
-                  onClick={() =>
-                    mutate({
-                      deadline,
-                      jobs: jobs?.data?.jobTitle,
-                      email: user?.email,
-                      status: "pending",
-                    })
-                  }
-                  className="btn btn-primary"
-                >
-                  Bid on the project
-                </button>
+                {user?.email !== jobs?.data?.email ? (
+                  <button
+                    onClick={() =>
+                      mutate({
+                        price,
+                        deadline,
+                        jobs: jobs?.data?.jobTitle,
+                        email: user?.email,
+                        status: "pending",
+                      })
+                    }
+                    className="btn btn-primary capitalize"
+                  >
+                    Bid on the project
+                  </button>
+                ) : (
+                  <button disabled className="btn bg-red-600 capitalize">
+                    Bid on the project
+                  </button>
+                )}
               </div>
             </form>
           </div>

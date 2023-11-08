@@ -21,7 +21,7 @@ const UpdateJob = () => {
   const { user } = useAuth();
 
   //   Get the jobs from DB
-  const { data: job, isLoading } = useQuery({
+  const { data: job } = useQuery({
     queryKey: ["jobs"],
     queryFn: async () => {
       const res = await axios.get("/jobs");
@@ -32,14 +32,6 @@ const UpdateJob = () => {
   const jobId = id;
   const filterJob = job ? job.find((item) => item._id === jobId) : null;
   console.log(filterJob);
-
-  //   Update the job to DB
-  const { mutate, isSuccess } = useMutation({
-    mutationKey: ["updateJob"],
-    mutationFn: (updateJob) => {
-      return axios.patch("/user/jobs", updateJob);
-    },
-  });
 
   // Extract numeric values when "job" data is available
   useEffect(() => {
@@ -58,13 +50,6 @@ const UpdateJob = () => {
     }
   }, [filterJob]);
 
-  console.log("price", minPrice, maxPrice);
-
-  if (isSuccess) {
-    console.log("job added");
-    toast.success("Data added successfully");
-  }
-
   // Function to convert the date to the required format
   // Format the date to "yyyy-MM-dd" format
   const formatToYYYYMMDD = (dateString) => {
@@ -72,7 +57,8 @@ const UpdateJob = () => {
     if (isNaN(date)) {
       return ""; // Return an empty string for an invalid date
     }
-    const formattedDate = date.toISOString().split("T")[0];
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split("T")[0];
     return formattedDate;
   };
   // Add one day to the current date
@@ -80,6 +66,21 @@ const UpdateJob = () => {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const tomorrowFormatted = tomorrow.toISOString().split("T")[0];
+
+  console.log(jobTitle, category, deadline, description, priceRange);
+  //   Update the job to DB
+  const { mutate, isSuccess } = useMutation({
+    mutationKey: ["updateJob"],
+    mutationFn: (updateJob) => {
+      return axios.patch(`/user/Update-jobs/${id}`, updateJob);
+    },
+  });
+
+  console.log(jobTitle, category, deadline, description, priceRange);
+
+  if (isSuccess) {
+    toast.success("Data updated successfully");
+  }
 
   return (
     <div>
@@ -131,7 +132,7 @@ const UpdateJob = () => {
               placeholder="Enter your job title"
               className="input input-bordered"
               required
-              onBlur={(e) => setJobTitle(e.target.value)}
+              onChange={(e) => setJobTitle(e.target.value)}
             />
           </div>
 
@@ -144,11 +145,12 @@ const UpdateJob = () => {
             </label>
             <select
               className="input input-bordered"
+              defaultValue={filterJob?.category}
               required
               onChange={(e) => setCategory(e.target.value)}
             >
               <option className="pb-2" disabled selected>
-                Your category: {filterJob?.category}
+                Choose one
               </option>
               <option value="Web Development">Web Development</option>
               <option value="Digital Marketing">Digital Marketing</option>
@@ -171,7 +173,7 @@ const UpdateJob = () => {
               placeholder="Enter your job title"
               className="input input-bordered"
               required
-              onBlur={(e) => setDeadline(e.target.value)}
+              onChange={(e) => setDeadline(e.target.value)}
             />
           </div>
 
@@ -187,7 +189,7 @@ const UpdateJob = () => {
               placeholder="Description"
               defaultValue={filterJob?.description}
               required
-              onBlur={(e) => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
 
@@ -195,7 +197,10 @@ const UpdateJob = () => {
           <div className="form-control">
             <label className="label">
               <span className="label-text font-medium text-[#51A4FB]">
-                Price Range: ${minPrice} to ${maxPrice}
+                Price Range:{" "}
+                <span className="text-black">
+                  ${minPrice} to ${maxPrice}
+                </span>
               </span>
             </label>
             <div className="flex gap-2">
@@ -207,7 +212,7 @@ const UpdateJob = () => {
                 min={1}
                 className="input input-bordered text-sm w-1/2"
                 required
-                onBlur={(e) => setMinPrice(e.target.value)}
+                onChange={(e) => setMinPrice(e.target.value)}
               />
               <input
                 type="number"
@@ -217,7 +222,7 @@ const UpdateJob = () => {
                 min={Number(minPrice) + 1}
                 className="input input-bordered text-sm w-1/2"
                 required
-                onBlur={(e) => setMaxPrice(e.target.value)}
+                onChange={(e) => setMaxPrice(e.target.value)}
               />
             </div>
           </div>
@@ -231,11 +236,12 @@ const UpdateJob = () => {
                 description,
                 category,
                 priceRange,
+                status: "confirm",
               });
             }}
             className="btn btn-primary w-full p-3 bg-[#51A4FB] text-sm font-bold tracking-normal uppercase rounded text-gray-900"
           >
-            Add Your Job
+            Update the Job
           </button>
         </form>
       </div>

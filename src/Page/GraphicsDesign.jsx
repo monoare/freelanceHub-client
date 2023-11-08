@@ -50,7 +50,7 @@ const GraphicsDesign = () => {
                 <span className="font-medium">{item.deadline}</span>
               </p>
               <div className="w-full">
-                <Link to="/jobDetails">
+                <Link to={`/user/jobDetails/${item._id}`}>
                   <button className="btn w-full capitalize">Bid Now</button>
                 </Link>
               </div>

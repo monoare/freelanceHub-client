@@ -1,12 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxios from "../Hooks/useAxios";
 import { auth } from "../Config/Firebase.config";
 import useAuth from "../Hooks/useAuth";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const MyPostedJobs = () => {
   const axios = useAxios();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const { data: postedJob, isLoading } = useQuery({
     queryKey: ["postedJobs"],
@@ -14,6 +16,23 @@ const MyPostedJobs = () => {
       const email = auth.currentUser.email;
       const res = await axios.get(`/user/jobs?email=${email}`);
       return res.data;
+    },
+  });
+
+  console.log(postedJob);
+
+  // Delete the data
+  const { mutate } = useMutation({
+    mutationKey: ["booking"],
+    mutationFn: async (id) => {
+      // Display a confirmation dialog before actually Deleting
+      if (window.confirm("Are you sure you want to Delete this booking?")) {
+        const response = await axios.delete(`/user/delete-job/${id}`);
+        if (response.status === 200) {
+          toast.success("Delete done");
+          queryClient.invalidateQueries({ queryKey: ["booking"] });
+        }
+      }
     },
   });
 
@@ -63,7 +82,12 @@ const MyPostedJobs = () => {
                     </button>
                   </Link>
 
-                  <button className="btn btn-warning capitalize">Delete</button>
+                  <button
+                    className="btn btn-warning capitalize"
+                    onClick={() => mutate(item._id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>

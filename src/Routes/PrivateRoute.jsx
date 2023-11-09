@@ -8,7 +8,7 @@ const PrivateRoute = ({ children }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center min-h-screen">
         <RotatingLines
           strokeColor="grey"
           strokeWidth="5"

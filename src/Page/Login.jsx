@@ -16,23 +16,24 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const toastId = toast.loading("Logging in ...");
-    // form.reset();
+
+    form.reset();
 
     // password length verification
-    // if (password.length < 6) {
-    //   toast.error("Password must be six or more character!");
-    //   return;
-    // }
+    if (password.length < 6) {
+      toast.error("Password must be six or more character!");
+      return;
+    }
 
-    // // password special character verification
-    // if (!/[A-Z!@#$%^&*()_+{}|:"<>?]/.test(password)) {
-    //   toast.error(
-    //     "Password must be an uppercase letter and one special character!"
-    //   );
-    //   return;
-    // }
+    // password special character verification
+    if (!/[A-Z!@#$%^&*()_+{}|:"<>?]/.test(password)) {
+      toast.error(
+        "Password must be an uppercase letter and one special character!"
+      );
+      return;
+    }
 
+    const toastId = toast.loading("Logging in ...");
     try {
       const user = await login(email, password);
       console.log(user);
@@ -47,8 +48,6 @@ const Login = () => {
       } else {
         logout();
       }
-
-      console.log(res);
     } catch (error) {
       toast.error(error.message, { id: toastId });
     }

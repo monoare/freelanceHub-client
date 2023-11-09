@@ -81,4 +81,4 @@ Welcome to FreelanceHub, a platform connecting freelancers and employers. This p
 
 **Client-side live link:**
 
-### https:
+### https://freelancehub-45daa.web.app/

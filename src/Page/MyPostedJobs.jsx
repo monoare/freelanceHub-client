@@ -39,16 +39,16 @@ const MyPostedJobs = () => {
 
   return (
     <Container>
-      <div className="my-10">
+      <div className="my-10 min-h-screen">
         <h1 className="text-3xl text-center font-semibold text-[#51A4FB]">
-          Digital Marketing
+          My Posted Jobs
         </h1>
         <p className="py-5 text-justify">
-          Explore an array of exciting digital marketing job opportunities.
-          Whether you&apos;re a seasoned professional or a company looking for
-          top talent, discover roles like digital marketing managers, SEO
-          specialists, and more. Join our digital marketing community for
-          endless possibilities in online marketing. Start your journey today!
+          Explore an array of exciting job opportunities. Whether you&apos;re a
+          seasoned professional or a company looking for top talent, discover
+          roles like digital marketing, web development, graphics design and
+          more. Join our community for endless possibilities in online
+          marketing. Start your journey today!
         </p>
         {user && isLoading ? (
           <div>

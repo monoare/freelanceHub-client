@@ -18,8 +18,10 @@ const GraphicsDesign = () => {
 
   return (
     <div className="my-10">
-      <h1 className="text-3xl">Graphics Design</h1>
-      <p>
+      <h1 className="text-3xl text-center font-semibold text-[#51A4FB]">
+        Graphics Design
+      </h1>
+      <p className="py-5 text-justify">
         Discover a wealth of dynamic digital marketing job listings right here.
         Whether you&apos;re an experienced digital marketing pro seeking your
         next challenge or a business looking to tap into marketing expertise,

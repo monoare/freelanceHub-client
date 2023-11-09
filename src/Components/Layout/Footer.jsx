@@ -3,9 +3,9 @@ const Footer = () => {
   return (
     <div className="bg-[#2B3247] ">
       <footer className="p-10 text-white w-full max-w-7xl px-6 mx-auto">
-        <div className="flex gap-28">
-          <div className="flex-[1]">
-            <img className="w-20" src={logo} alt="" />
+        <div className="flex gap-3 md:gap-28">
+          <div className="flex-[1] text-xs md:text-base">
+            <img className="w-12 md:w-20" src={logo} alt="" />
             <p>
               <span className="mb-4">FreelanceHub</span>
               <br />
@@ -47,22 +47,22 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          <div className="flex-[3] flex justify-between">
-            <div className="flex flex-col">
+          <div className="flex-[3] flex justify-between text-xs md:text-base">
+            <div className="flex flex-col space-y-1">
               <header className="footer-title">Services</header>
               <a className="link link-hover">Branding</a>
-              <a className="link link-hover">Design</a>
-              <a className="link link-hover">Marketing</a>
-              <a className="link link-hover">Advertisement</a>
+              <a className="link link-hover">Graphics Design</a>
+              <a className="link link-hover">Digital Marketing</a>
+              <a className="link link-hover">Web Development</a>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col space-y-1">
               <header className="footer-title">Company</header>
               <a className="link link-hover">About us</a>
               <a className="link link-hover">Contact</a>
               <a className="link link-hover">Jobs</a>
               <a className="link link-hover">Press kit</a>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col space-y-1">
               <header className="footer-title">Legal</header>
               <a className="link link-hover">Terms of use</a>
               <a className="link link-hover">Privacy policy</a>

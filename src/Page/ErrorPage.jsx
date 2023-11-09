@@ -8,7 +8,7 @@ const ErrorPage = () => {
       style={{ backgroundImage: `url(${error})` }}
     >
       <div className="text-red-500 text-center">
-        <h1 className="text-4xl  font-bold mb-4">404 - Not Found</h1>
+        <h1 className="text-4xl font-bold mb-4">404 - Not Found</h1>
         <p className="text-lg mb-8">
           The page you are looking for might be under construction or does not
           exist.

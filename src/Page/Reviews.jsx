@@ -52,7 +52,7 @@ const Reviews = () => {
                 alt=""
               />
               <p className="py-5 text-lg">{item.name}</p>
-              <p>{item.comment}</p>
+              <p className="px-3">{item.comment}</p>
             </div>
           ))}
         </AwesomeSlider>

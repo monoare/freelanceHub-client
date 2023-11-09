@@ -4,16 +4,19 @@ import loginImg from "../assets/image/login.jpg";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import useAuth from "../Hooks/useAuth";
+import useAxios from "../Hooks/useAxios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, logout, googleLogin } = useAuth();
   const navigate = useNavigate();
+  const axios = useAxios();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
+    const toastId = toast.loading("Logging in ...");
     // form.reset();
 
     // password length verification
@@ -31,17 +34,26 @@ const Login = () => {
     // }
 
     try {
-      const loggedUser = await login(email, password);
-      if (loggedUser) {
-        console.log("success");
-        toast.success("User logged in successfully");
+      const user = await login(email, password);
+      console.log(user);
+
+      const res = await axios.post("/auth/access-token", {
+        email: user.user?.email,
+      });
+
+      if (res.data.success) {
+        toast.success("Logged in", { id: toastId });
+        navigate("/");
       } else {
-        logout;
+        logout();
       }
+
+      console.log(res);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message, { id: toastId });
     }
   };
+
   const handleGoogleLogin = async () => {
     const toastId = toast.loading("Logging in ...");
 

@@ -49,7 +49,7 @@ const Register = () => {
 
   return (
     <div
-      className="hero min-h-screen"
+      className="hero min-w-full min-h-screen"
       style={{
         backgroundImage: `url(${login})`,
       }}
@@ -57,7 +57,7 @@ const Register = () => {
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content flex-col text-center w-full">
         <p className="text-5xl font-bold text-base-100">Register Now!</p>
-        <div className="shadow-lg w-1/3 rounded-lg bg-base-100 ">
+        <div className="shadow-lg lg:w-1/3 rounded-lg bg-base-100 ">
           <form
             onSubmit={handleSubmit}
             className="card-body shadow-lg rounded-lg bg-base-100"

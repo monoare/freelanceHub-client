@@ -3,7 +3,7 @@ import { BsSearch } from "react-icons/bs";
 const Banner = () => {
   return (
     <div
-      className="hero object-cover h-[70vh]"
+      className="hero object-cover min-h-screen"
       style={{
         backgroundImage:
           "url(https://images.unsplash.com/photo-1502900476531-ca62d0f2b679?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
@@ -12,16 +12,17 @@ const Banner = () => {
       <div className="hero-overlay"></div>
       <div className="hero-content w-full">
         <div className="w-full">
-          <h1 className="mb-5 text-5xl text-white font-medium">
-            Discover and Employ <br /> Skilled Freelancers
+          <h1 className="mb-5 text-3xl text-center md:text-left md:text-5xl text-white font-medium">
+            Discover and Employ <br />{" "}
+            <span className="text-yellow-400">Skilled Freelancers</span>
           </h1>
-          <p className="mb-5 text-white font-medium text-lg">
+          <p className="mb-5 text-white text-center md:text-left font-medium text-lg">
             Work with the best freelance talent from around the world on our
             secure, flexible and cost-effective platform.
           </p>
           <p className="border-t-4 border-[#51A4FB] w-28 pb-5"></p>
           <div>
-            <div className="flex items-center">
+            <div className="flex flex-col md:flex-row items-center">
               <div className="relative">
                 <input
                   type="text"
@@ -39,7 +40,7 @@ const Banner = () => {
                 </button>
               </div>
             </div>
-            <div>
+            <div className="flex justify-center md:justify-start">
               <button className="border mr-2 mt-4 p-1 text-xs rounded text-white">
                 Web Development
               </button>

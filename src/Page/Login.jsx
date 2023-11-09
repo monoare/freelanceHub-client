@@ -64,8 +64,8 @@ const Login = () => {
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content flex-col text-center w-full">
         <p className="text-5xl font-bold text-base-100">Log Now!</p>
-        <div className="shadow-lg w-1/3 rounded-lg bg-base-100">
-          <form className="card-body" onSubmit={handleSubmit}>
+        <div className="shadow-lg lg:w-1/3 rounded-lg bg-base-100">
+          <form className="card-body w-full" onSubmit={handleSubmit}>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>

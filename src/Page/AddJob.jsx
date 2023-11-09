@@ -17,10 +17,13 @@ const AddJob = () => {
   const axios = useAxios();
   const { user } = useAuth();
 
-  const { mutate, isSuccess } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["addJobs"],
     mutationFn: (jobData) => {
       return axios.post("/jobs", jobData);
+    },
+    onMutate: () => {
+      return toast.success("Data added successfully");
     },
   });
 
@@ -30,11 +33,6 @@ const AddJob = () => {
       setPriceRange(rang);
     }
   }, [minPrice, maxPrice]);
-
-  if (isSuccess) {
-    console.log("job added");
-    toast.success("Data added successfully");
-  }
 
   // Add one day to the current date
   const tomorrow = new Date();
@@ -91,7 +89,7 @@ const AddJob = () => {
               placeholder="Enter your job title"
               className="input input-bordered"
               required
-              onBlur={(e) => setJobTitle(e.target.value)}
+              onChange={(e) => setJobTitle(e.target.value)}
             />
           </div>
 
@@ -105,9 +103,9 @@ const AddJob = () => {
             <select
               className="input input-bordered"
               required
-              onChange={(e) => setCategory(e.target.value)}
+              onClick={(e) => setCategory(e.target.value)}
             >
-              <option value="" className="pb-2" disabled>
+              <option value="" className="pb-2" disabled selected>
                 Choose one
               </option>
               <option value="Web Development">Web Development</option>
@@ -130,7 +128,7 @@ const AddJob = () => {
               placeholder="Enter your job title"
               className="input input-bordered"
               required
-              onBlur={(e) => setDeadline(e.target.value)}
+              onChange={(e) => setDeadline(e.target.value)}
             />
           </div>
 
@@ -145,7 +143,7 @@ const AddJob = () => {
               className="textarea textarea-bordered textarea-lg w-full"
               placeholder="Description"
               required
-              onBlur={(e) => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
 
@@ -164,7 +162,7 @@ const AddJob = () => {
                 min={1}
                 className="input input-bordered text-sm w-1/2"
                 required
-                onBlur={(e) => setMinPrice(e.target.value)}
+                onChange={(e) => setMinPrice(e.target.value)}
               />
               <input
                 type="number"
@@ -173,7 +171,7 @@ const AddJob = () => {
                 min={Number(minPrice) + 1}
                 className="input input-bordered text-sm w-1/2"
                 required
-                onBlur={(e) => setMaxPrice(e.target.value)}
+                onChange={(e) => setMaxPrice(e.target.value)}
               />
             </div>
           </div>

@@ -9,11 +9,13 @@ import Register from "../Page/Register";
 import JobDetails from "../Page/JobDetails";
 import MyPostedJobs from "../Page/MyPostedJobs";
 import UpdateJob from "../Page/UpdateJob";
+import ErrorPage from "../Page/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "addJob",

@@ -66,7 +66,10 @@ const MyBids = () => {
                             });
                           }}
                           className="btn btn-warning btn-sm"
-                          disabled={item.status === "in progress"}
+                          disabled={
+                            item.status === "in progress" ||
+                            item.status === "canceled"
+                          }
                         >
                           Reject
                         </button>
@@ -75,18 +78,18 @@ const MyBids = () => {
                         <button
                           onClick={() => {
                             mutate({
-                              status: "is in progress",
+                              status: "in progress",
                               id: item._id,
                             });
                           }}
                           className="btn btn-primary btn-sm"
-                          disabled={item.status === "in progress"}
+                          disabled={item.status === "canceled"}
                         >
                           Accept
                         </button>
                       </td>
                       <td>
-                        {item?.status === "is in progress" ? (
+                        {item?.status === "in progress" ? (
                           <button
                             onClick={() => {
                               mutate({
